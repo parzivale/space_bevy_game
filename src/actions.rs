@@ -1,47 +1,24 @@
-use bevy::{input::mouse::MouseMotion,prelude::*};
-use bevy_mod_wanderlust::*;
+use crate::{GameState, PlayerBody, PlayerCamera};
+use ::bevy::{input::mouse::MouseMotion, prelude::*};
+use bevy_mod_wanderlust::ControllerInput;
+use iyes_loopless::prelude::*;
+pub struct ActionsPlugin;
 
-
-#[derive(Component, Default, Reflect)]
-#[reflect(Component)]
-pub struct PlayerBody;
-
-#[derive(Component, Default, Reflect)]
-#[reflect(Component)]
-pub struct PlayerCamera;
-
-
-#[derive(Reflect)]
-pub struct Sensitivity(pub f32);
-
-pub struct PlayerController;
-
-impl Plugin for PlayerController {
+// This plugin listens for keyboard input and converts the input into Actions
+// Actions can then be used as a resource in other systems to act on the player input.
+impl Plugin for ActionsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(WanderlustPlugin)
-        .insert_resource(Sensitivity(0.15))
-        .add_startup_system(setup_player_controller)
-        .add_system_to_stage(CoreStage::PreUpdate, movement_input)
-        .add_system(mouse_look);
+        app.add_system_to_stage(
+            CoreStage::PreUpdate,
+            movement_input.run_in_state(GameState::Unpaused),
+        )
+        .add_system(mouse_look.run_in_state(GameState::Unpaused));
     }
-}
-
-pub fn setup_player_controller(mut commands: Commands){
-    commands.spawn_bundle(CharacterControllerBundle{..default()})
-    .insert(PlayerBody)
-    .with_children(|commands| {
-        commands.spawn_bundle(Camera3dBundle{
-            transform: Transform::from_xyz(0.,0.5,0.),
-            ..default()
-        })
-        .insert(PlayerCamera);
-    });
 }
 
 pub fn mouse_look(
     mut cam: Query<&mut Transform, With<PlayerCamera>>,
     mut body: Query<&mut Transform, (With<PlayerBody>, Without<PlayerCamera>)>,
-    sensitivity: Res<Sensitivity>,
     mut input: EventReader<MouseMotion>,
     time: Res<Time>,
 ) {
@@ -49,7 +26,7 @@ pub fn mouse_look(
     let mut body_tf = body.single_mut();
 
     let dt = time.delta_seconds();
-    let sens = sensitivity.0;
+    let sens = 0.12;
 
     for motion in input.iter() {
         // Vertical
