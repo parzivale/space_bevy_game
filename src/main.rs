@@ -1,7 +1,6 @@
 use bevy::{prelude::*, window::WindowMode::*};
 use bevy_inspector_egui::{Inspectable, WorldInspectorPlugin};
 use bevy_rapier3d::prelude::*;
-use iyes_loopless::prelude::*;
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash, Inspectable)]
 pub enum GameState {
@@ -23,7 +22,7 @@ mod world_gen;
 
 fn main() {
     App::new()
-        .add_loopless_state(GameState::Unpaused)
+        .add_state(GameState::Unpaused)
         .insert_resource(ClearColor(Color::rgb(0.2, 0.2, 0.2)))
         .insert_resource(WindowDescriptor {
             resizable: false,

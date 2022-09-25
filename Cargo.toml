@@ -17,3 +17,4 @@ bevy_rapier3d = { version = "*", features = [ "simd-stable", "parallel" ] }
 bevy_mod_wanderlust = "0.2.2"
 bevy-inspector-egui = "0.13.0"
 iyes_loopless = "0.7.1"
+no-panic = "0.1"
