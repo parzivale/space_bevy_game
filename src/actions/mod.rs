@@ -1,6 +1,5 @@
 use crate::GameState;
 use bevy::{app::AppExit, input::keyboard::KeyboardInput, prelude::*};
-use no_panic::no_panic;
 pub struct ActionsPlugin;
 
 mod mouse;
@@ -18,7 +17,6 @@ impl Plugin for ActionsPlugin {
     }
 }
 
-#[no_panic]
 fn key_match(
     mut key_evr: EventReader<KeyboardInput>,
     mut exit: EventWriter<AppExit>,
