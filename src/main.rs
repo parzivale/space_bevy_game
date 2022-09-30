@@ -1,15 +1,13 @@
 use bevy::{prelude::*, window::WindowMode::*};
-use bevy_inspector_egui::{Inspectable, WorldInspectorPlugin};
+use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash, Inspectable)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum GameState {
     Paused,
     Unpaused,
 }
 
-
-mod actions;
 mod player;
 mod world_gen;
 
@@ -22,16 +20,10 @@ fn main() {
             mode: Fullscreen,
             ..default()
         })
-        .add_startup_system(setup)
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
-        .add_plugin(actions::ActionsPlugin)
         .add_plugin(world_gen::WorldGen)
         .add_plugin(player::Player)
         .run();
-}
-
-fn setup(mut commands: Commands) {
-    commands.spawn();
 }
