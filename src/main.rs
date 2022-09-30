@@ -8,13 +8,6 @@ pub enum GameState {
     Unpaused,
 }
 
-#[derive(Component, Default, Reflect)]
-#[reflect(Component)]
-pub struct PlayerBody;
-
-#[derive(Component, Default, Reflect)]
-#[reflect(Component)]
-pub struct PlayerCamera;
 
 mod actions;
 mod player;

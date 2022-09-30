@@ -2,8 +2,6 @@ use crate::GameState;
 use bevy::{app::AppExit, input::keyboard::KeyboardInput, prelude::*};
 pub struct ActionsPlugin;
 
-mod mouse;
-mod movement;
 
 // This plugin listens for keyboard input and converts the input into Actions
 // Actions can then be used as a resource in other systems to act on the player input.

@@ -13,7 +13,7 @@ opt-level = 3
 
 [dependencies]
 bevy = {version = "0.8", features = ["dynamic"]}
-bevy_rapier3d = { version = "*", features = [ "simd-stable", "parallel" ] }
-bevy_mod_wanderlust = "0.2.2"
-bevy-inspector-egui = "0.13.0"
-iyes_loopless = "0.7.1"
+    bevy_rapier3d = { version = "*", features = [ "simd-stable", "parallel" ] }
+    bevy_mod_wanderlust = "0.2.2"
+    bevy-inspector-egui = "0.13.0"
+    leafwing-input-manager = "0.5.2"
