@@ -20,19 +20,22 @@ pub enum Action {
     Jump,
 }
 
-pub struct Player;
+pub struct PlayerPlugin;
 
-impl Plugin for Player {
+impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(WanderlustPlugin)
             .add_plugin(InputManagerPlugin::<Action>::default())
             .add_startup_system(setup_player_controller)
-            .add_system(movement_input)
-            .add_system_set(SystemSet::on_update(GameState::Unpaused).with_system(mouse_look));
+            .add_system_set(
+                SystemSet::on_update(GameState::Unpaused)
+                .with_system(mouse_look)
+                .with_system(movement_input)
+            );
     }
 }
 
-pub fn setup_player_controller(mut commands: Commands, state: Res<State<GameState>>) {
+pub fn setup_player_controller(mut commands: Commands) {
     commands
         .spawn_bundle(InputManagerBundle::<Action> {
             action_state: ActionState::default(),
@@ -54,19 +57,9 @@ pub fn setup_player_controller(mut commands: Commands, state: Res<State<GameStat
                 })
                 .insert(PlayerCamera);
         });
-
-        match state.current() {
-            GameState::Unpaused => {
-                ToggleActions::<Action>::default().enabled=true;
-            }
-            GameState::Paused => {
-                ToggleActions::<Action>::default().enabled=false;
-            }
-            _ => {}
-        }
 }
 
-    pub fn movement_input(
+pub fn movement_input(
     mut body: Query<&mut ControllerInput, With<PlayerBody>>,
     camera: Query<&GlobalTransform, (With<PlayerCamera>, Without<PlayerBody>)>,
     input: Query<&ActionState<Action>, With<PlayerBody>>,

@@ -1,15 +1,20 @@
 use bevy::{prelude::*, window::WindowMode::*};
 use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
-
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
-pub enum GameState {
-    Paused,
-    Unpaused,
-}
+use leafwing_input_manager::prelude::*;
 
 mod player;
 mod world_gen;
+mod menu;
+mod common;
+
+
+#[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
+pub enum GameState {
+    Unpaused,
+    Paused,
+}
+
 
 fn main() {
     App::new()
@@ -23,7 +28,8 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
-        .add_plugin(world_gen::WorldGen)
-        .add_plugin(player::Player)
+        .add_plugin(world_gen::WorldGenPlugin)
+        .add_plugin(player::PlayerPlugin)
+        .add_plugin(menu::MenuPlugin)
         .run();
 }
