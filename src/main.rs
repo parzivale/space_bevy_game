@@ -3,18 +3,15 @@ use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
 use leafwing_input_manager::prelude::*;
 
+mod menu;
 mod player;
 mod world_gen;
-mod menu;
-mod common;
-
 
 #[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum GameState {
     Unpaused,
     Paused,
 }
-
 
 fn main() {
     App::new()
@@ -31,5 +28,12 @@ fn main() {
         .add_plugin(world_gen::WorldGenPlugin)
         .add_plugin(player::PlayerPlugin)
         .add_plugin(menu::MenuPlugin)
+        .add_startup_system(setup)
         .run();
+}
+
+fn setup(mut windows: ResMut<Windows>) {
+    let window = windows.get_primary_mut().unwrap();
+    window.set_cursor_lock_mode(true);
+    window.set_cursor_visibility(false);
 }
