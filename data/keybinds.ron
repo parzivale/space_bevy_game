@@ -1,0 +1,9 @@
+(
+    player_movement: [
+        (W, Forward),
+        (S, Backward),
+        (A, Left),
+        (D, Right),
+    ],
+
+)

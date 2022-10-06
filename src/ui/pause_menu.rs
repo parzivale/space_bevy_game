@@ -1,30 +1,26 @@
 use crate::GameState;
-use bevy::prelude::*;
+use bevy::{app::AppExit, prelude::*};
 use leafwing_input_manager::prelude::*;
-use bevy::app::AppExit;
-
-
-#[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
-pub enum Action {
-    ToggleMenu,
-    ExitGame,
-}
 
 #[derive(Component)]
 pub struct PauseMenu;
 
-pub struct MenuPlugin;
+#[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
+enum MenuActions {
+    ToggleMenu,
+    ExitGame,
+}
 
-impl Plugin for MenuPlugin {
+pub struct PauseMenuPlugin;
+
+impl Plugin for PauseMenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(InputManagerPlugin::<Action>::default())
+        app.add_plugin(InputManagerPlugin::<MenuActions>::default())
             .add_startup_system(setup_menu)
             .add_system(toggle_menu)
             .add_system(exit_game);
     }
 }
-
-
 
 pub fn setup_menu(mut commands: Commands, asset_sever: Res<AssetServer>) {
     let font = asset_sever.load("fonts/FiraCode[wght].ttf");
@@ -40,7 +36,7 @@ pub fn setup_menu(mut commands: Commands, asset_sever: Res<AssetServer>) {
     commands
         .spawn_bundle(InputManagerBundle {
             action_state: ActionState::default(),
-            input_map: InputMap::new([(KeyCode::Escape, Action::ToggleMenu)]),
+            input_map: InputMap::new([(KeyCode::Escape, MenuActions::ToggleMenu)]),
         })
         .insert(PauseMenu)
         .insert_bundle(NodeBundle {
@@ -61,7 +57,7 @@ pub fn setup_menu(mut commands: Commands, asset_sever: Res<AssetServer>) {
                     ..default()
                 })
                 .insert(ActionStateDriver {
-                    action: Action::ExitGame,
+                    action: MenuActions::ExitGame,
                     entity: parent_entity,
                 })
                 .with_children(|parent| {
@@ -78,7 +74,7 @@ pub fn setup_menu(mut commands: Commands, asset_sever: Res<AssetServer>) {
 }
 
 fn toggle_menu(
-    mut input: Query<&mut ActionState<Action>, With<PauseMenu>>,
+    mut input: Query<&mut ActionState<MenuActions>, With<PauseMenu>>,
     mut state: ResMut<State<GameState>>,
     mut menu: Query<&mut Visibility, With<PauseMenu>>,
     mut windows: ResMut<Windows>,
@@ -87,25 +83,29 @@ fn toggle_menu(
     let mut menu = menu.single_mut();
     let window = windows.get_primary_mut().unwrap();
 
-    if actions_state.pressed(Action::ToggleMenu) && state.current() == &GameState::Unpaused {
+    if actions_state.pressed(MenuActions::ToggleMenu) && state.current() == &GameState::Unpaused {
         state.set(GameState::Paused).unwrap();
-        actions_state.consume(Action::ToggleMenu);
+        actions_state.consume(MenuActions::ToggleMenu);
         menu.is_visible = true;
         window.set_cursor_lock_mode(false);
         window.set_cursor_visibility(true);
-    } else if actions_state.pressed(Action::ToggleMenu) && state.current() != &GameState::Unpaused {
+    } else if actions_state.pressed(MenuActions::ToggleMenu)
+        && state.current() != &GameState::Unpaused
+    {
         state.set(GameState::Unpaused).unwrap();
-        actions_state.consume(Action::ToggleMenu);
+        actions_state.consume(MenuActions::ToggleMenu);
         menu.is_visible = false;
         window.set_cursor_lock_mode(true);
         window.set_cursor_visibility(false);
     }
 }
 
-
-fn exit_game(mut event: EventWriter<AppExit>, input: Query<&ActionState<Action>, With<PauseMenu>>){
+fn exit_game(
+    mut event: EventWriter<AppExit>,
+    input: Query<&ActionState<MenuActions>, With<PauseMenu>>,
+) {
     let actions_state = input.single();
-    if actions_state.pressed(Action::ExitGame){
+    if actions_state.pressed(MenuActions::ExitGame) {
         event.send(AppExit);
     }
 }

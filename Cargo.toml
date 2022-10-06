@@ -1,5 +1,5 @@
 [package]
-name = "game"
+name = "space_bevy_game"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,6 +12,8 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
+ron = "0.8"
+serde = { version = "1", features = ["derive"] }
 bevy = {version = "0.8", features = ["dynamic"]}
 bevy_rapier3d = { version = "*", features = [ "simd-stable", "parallel" ] }
 bevy_mod_wanderlust = "0.2.2"
