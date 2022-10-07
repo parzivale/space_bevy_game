@@ -1,12 +1,23 @@
 use ::bevy_rapier3d::prelude::*;
 use bevy::prelude::*;
-
+mod planet;
 pub struct WorldGenPlugin;
 
 impl Plugin for WorldGenPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(plane);
+        app.add_startup_system(plane)
+        .add_startup_system(create_planet);
     }
+}
+
+fn create_planet(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>, mut materials: ResMut<Assets<StandardMaterial>>,) {
+    commands.spawn_bundle(PbrBundle {
+        mesh: meshes.add(Mesh::from(planet::PlanetMesh {
+            resolution: 10,
+        })),
+        material: materials.add(Color::rgb(0.67, 0.84, 0.92).into()),
+        ..default()
+    });
 }
 
 fn plane(
