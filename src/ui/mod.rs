@@ -2,10 +2,10 @@ use bevy::prelude::*;
 
 mod pause_menu;
 
-pub struct MenuPlugin;
+pub struct UiPlugin;
 
-impl Plugin for MenuPlugin {
+impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(pause_menu::PauseMenuPlugin);
+        //app.add_plugin(pause_menu::PauseMenuPlugin);
     }
 }

@@ -1,28 +1,26 @@
-use ::bevy_rapier3d::prelude::*;
-use bevy::prelude::*;
-mod planet;
-pub struct WorldGenPlugin;
+use bevy::{prelude::*, window::WindowMode::Fullscreen};
+use bevy_rapier3d::prelude::*;
+use space_bevy_game::player::*;
 
-impl Plugin for WorldGenPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_startup_system(plane)
-            .add_startup_system(create_planet);
-    }
+fn main() {
+    App::default()
+        .insert_resource(ClearColor(Color::rgb(0.2, 0.2, 0.2)))
+        .insert_resource(WindowDescriptor {
+            resizable: false,
+            mode: Fullscreen,
+            cursor_locked: true,
+            cursor_visible: false,
+            ..default()
+        })
+        .add_plugins(DefaultPlugins)
+        .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+        .add_plugin(PlayerPlugin)
+        .add_startup_system(setup)
+        .add_system(bevy::window::close_on_esc)
+        .run();
 }
 
-fn create_planet(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
-    commands.spawn_bundle(PbrBundle {
-        mesh: meshes.add(Mesh::from(planet::PlanetMesh { resolution: 10 })),
-        material: materials.add(Color::rgb(0.67, 0.84, 0.92).into()),
-        ..default()
-    });
-}
-
-fn plane(
+fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -45,7 +43,3 @@ fn plane(
         ..default()
     });
 }
-
-//fn () {
-
-//}
