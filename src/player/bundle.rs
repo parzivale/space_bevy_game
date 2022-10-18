@@ -59,31 +59,3 @@ impl Default for PlayerCameraBundle {
         }
     }
 }
-
-pub fn spawn_player_system(mut commands: Commands) {
-    commands
-        .spawn_bundle(InputManagerBundle::<PlayerActions> {
-            action_state: ActionState::default(),
-            input_map: InputMap::new([
-                (KeyCode::W, PlayerActions::Forward),
-                (KeyCode::S, PlayerActions::Backward),
-                (KeyCode::A, PlayerActions::Left),
-                (KeyCode::D, PlayerActions::Right),
-                (KeyCode::Space, PlayerActions::Jump),
-            ])
-            .insert(DualAxis::mouse_motion(), PlayerActions::Look)
-            .build(),
-        })
-        .insert_bundle(CharacterControllerBundle { ..default() })
-        .insert(Player)
-        .insert(Name::new("Player"))
-        .with_children(|commands| {
-            commands
-                .spawn_bundle(Camera3dBundle {
-                    transform: Transform::from_xyz(0., 0.5, 0.),
-                    ..default()
-                })
-                .insert(PlayerCamera)
-                .insert(Name::new("Camera"));
-        });
-}

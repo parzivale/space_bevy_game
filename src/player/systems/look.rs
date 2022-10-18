@@ -12,15 +12,6 @@ pub fn look_system(
     input: Query<&ActionState<PlayerActions>, With<Player>>,
     time: Res<Time>,
 ) {
-    if cam.is_empty() {
-        return;
-    }
-    if body.is_empty() {
-        return;
-    }
-    if input.is_empty() {
-        return;
-    }
 
     let mut cam_tf = cam.single_mut();
     let mut body_tf = body.single_mut();

@@ -12,12 +12,6 @@ pub fn movement_system(
     camera: Query<&GlobalTransform, (With<PlayerCamera>, Without<Player>)>,
     input: Query<&ActionState<PlayerActions>, With<Player>>,
 ) {
-    if body.is_empty() {
-        return;
-    }
-    if camera.is_empty() {
-        return;
-    }
 
     let tf = camera.single();
 
