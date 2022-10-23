@@ -51,6 +51,10 @@ impl Default for PlayerCameraBundle {
     fn default() -> Self {
         Self {
             camera: Camera3dBundle {
+                camera: Camera {
+                    priority: 1,
+                    ..default()
+                },
                 transform: Transform::from_xyz(0., 0.5, 0.),
                 ..default()
             },

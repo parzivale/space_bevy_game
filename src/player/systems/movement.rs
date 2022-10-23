@@ -12,7 +12,6 @@ pub fn movement_system(
     camera: Query<&GlobalTransform, (With<PlayerCamera>, Without<Player>)>,
     input: Query<&ActionState<PlayerActions>, With<Player>>,
 ) {
-
     let tf = camera.single();
 
     let mut player_input = body.single_mut();

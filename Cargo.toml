@@ -19,3 +19,4 @@ bevy_rapier3d = { version = "*", features = [ "simd-stable", "parallel" ] }
 bevy_mod_wanderlust = "0.2.2"
 bevy-inspector-egui = "0.13.0"
 leafwing-input-manager = "0.5.2"
+bevy-ui-navigation = "0.21.0"

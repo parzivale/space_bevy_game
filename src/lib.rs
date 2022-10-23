@@ -1,13 +1,20 @@
 use bevy::{prelude::*, window::WindowMode::*};
 use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
-use states::*;
+use bevy_ui_navigation::prelude::*;
 
 pub mod player;
-pub mod states;
-pub mod ui;
 pub mod world;
-pub mod spawn;
+pub mod ui;
+
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+pub enum AppState {
+    MainMenu,
+    Game,
+    Pause,
+    Inventory,
+    Loading,
+}
 
 pub struct GamePlugin;
 
@@ -30,10 +37,12 @@ impl Plugin for GamePlugin {
 
         // section setup plugins
         app.add_plugins(DefaultPlugins)
+            .add_plugins(DefaultNavigationPlugins)
             .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
             .add_plugin(world::WorldGenPlugin)
-            .add_plugin(player::PlayerPlugin::<states::AppState>::from_state(AppState::Game));
-            //.add_plugin(ui::MenuPlugin)
+            .add_plugin(player::PlayerPlugin::<AppState>::from_state(
+                AppState::Game,
+            ));
         // end section setup plugins
 
         if cfg!(debug_assertions) {
